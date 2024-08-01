@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model customer_identifier {
+  id                    Int                     @id @default(autoincrement())
+  customer_email        String                  @unique
+  customer_phone_number String                  @unique
+  customer_added_date   DateTime                @default(now())
+  customer_hash         String                  @db.VarChar(255)
+  //reference
+  customer              customer_info?
+  vehicle               customer_vehicle_info[]
+  orders                orders[]
+}
+
+model customer_info {
+  id                     Int                 @id @default(autoincrement())
+  customer_id            Int                 @unique
+  customer_first_name    String
+  customer_last_name     String
+  active_customer_status Int
+  //reference 
+  customer               customer_identifier @relation(fields: [customer_id], references: [id])
+}
+
+model customer_vehicle_info {
+  id              Int                 @id @default(autoincrement())
+  customer_id     Int
+  vehicle_year    Int
+  vehicle_make    String
+  vehicle_model   String
+  vehicle_type    String
+  vehicle_mileage Int
+  vehicle_tag     String
+  vehicle_color   String
+  //reference
+  customer        customer_identifier @relation(fields: [customer_id], references: [id])
+  orders          orders[]
+}
+
+model company_roles {
+  id                Int    @id @default(autoincrement())
+  company_role_name String @unique
+}
+
+model common_services {
+  id                  Int              @id @default(autoincrement())
+  service_name        String           @unique
+  service_description String           @db.LongText
+  //referemce 
+  services            order_services[]
+}
+
+model employee {
+  id              Int            @id @default(autoincrement())
+  employee_email  String         @unique
+  active_employee String
+  added_date      DateTime       @default(now())
+  //reference
+  employee        employee_info?
+  employee_pass   employee_pass?
+  employee_role   employee_role?
+  orders          orders[]
+}
+
+model employee_info {
+  id                  Int    @id @default(autoincrement())
+  employee_id         Int    @unique
+  employee_first_name String
+  employee_last_name  String
+  employee_phone      String @unique
+
+  //reference
+
+  employee employee @relation(fields: [employee_id], references: [id])
+}
+
+model employee_pass {
+  id                       Int      @id @default(autoincrement())
+  employee_id              Int      @unique
+  employee_password_hashed String
+  //reference
+  employee                 employee @relation(fields: [employee_id], references: [id])
+}
+
+model employee_role {
+  id              Int      @id @default(autoincrement())
+  employee_id     Int      @unique
+  company_role_id Int
+  //reference
+  employee        employee @relation(fields: [employee_id], references: [id])
+}
+
+
+
+
+
+model orders {
+  id             Int                   @id @default(autoincrement())
+  employee_id    Int
+  customer_id    Int
+  vehicle_id     Int
+  order_date     DateTime              @default(now())
+  active_order   Int
+  order_hash     String
+  //reference
+  employee       employee              @relation(fields: [employee_id], references: [id])
+  customer       customer_identifier   @relation(fields: [customer_id], references: [id])
+  vehicle        customer_vehicle_info @relation(fields: [vehicle_id], references: [id])
+  order_info     order_info[]
+  order_services order_services[]
+  order_status   order_status[]
+}
+
+model order_info {
+  id                            Int      @id @default(autoincrement())
+  order_id                      Int
+  order_total_price             Int
+  estimated_completion_date     DateTime @default(now())
+  completion_date               DateTime @default(now())
+  additional_request            String?
+  notes_for_internal_use        String?
+  notes_for_customer            String?
+  additional_requests_completed Int
+  //reference
+  order                         orders   @relation(fields: [order_id], references: [id])
+}
+
+model order_services {
+  id                Int             @id @default(autoincrement())
+  order_id          Int
+  service_id        Int
+  service_completed Int
+  //reference
+  orders            orders          @relation(fields: [order_id], references: [id])
+  services          common_services @relation(fields: [service_id], references: [id])
+}
+
+model order_status {
+  id           Int    @id @default(autoincrement())
+  order_id     Int
+  order_status Int
+  //reference
+  orders       orders @relation(fields: [order_id], references: [id])
+}

@@ -1,0 +1,33 @@
+
+https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-mysql
+
+
+Prisma is an open-source next-generation Object-Relational Mapper (ORM) for Node.js and TypeScript. It helps developers work with databases by providing a type-safe API that enables them to query and manipulate data with ease. Here are some key features and benefits of Prisma:
+
+Type Safety: Prisma generates TypeScript types from your database schema, ensuring type safety and reducing runtime errors.
+
+Query Builder: Prisma provides a powerful and intuitive query builder that simplifies complex database queries.
+
+Database Schema Management: Prisma includes tools for database schema management, allowing you to define and migrate your database schema using a declarative data modeling language called Prisma Schema Language (PSL).
+
+Compatibility: Prisma supports several popular databases, including PostgreSQL, MySQL, SQLite, SQL Server, and MongoDB.
+
+Performance: Prisma is optimized for performance, providing efficient database access and minimizing overhead.
+
+Ecosystem Integration: Prisma integrates well with modern JavaScript/TypeScript frameworks and libraries, such as Next.js, GraphQL, and Apollo.
+
+Key Components of Prisma
+Prisma Client: This is the main component that you use in your application code to interact with the database. It is generated based on your Prisma schema and provides a type-safe API for database operations.
+
+Prisma Migrate: This is a database migration tool that helps you evolve your database schema over time. It allows you to create and apply migrations based on changes in your Prisma schema.
+
+Prisma Studio: This is a GUI tool for interacting with your database. It provides a user-friendly interface for viewing and editing data in your database.
+
+How Prisma Works
+Define Your Schema: You start by defining your database schema using the Prisma Schema Language in a schema.prisma file. This schema file describes your database models, their fields, and relationships.
+
+Generate Prisma Client: After defining your schema, you run the Prisma CLI command prisma generate to generate the Prisma Client. This client is tailored to your schema and provides a type-safe API for your database.
+
+Use Prisma Client in Your Application: You can then use the Prisma Client in your application code to perform database operations, such as creating, reading, updating, and deleting records.
+
+Manage Migrations: As your schema evolves, you use Prisma Migrate to manage database migrations. You create migration files that describe changes to your schema, and Prisma applies these migrations to your database.
